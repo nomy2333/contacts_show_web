@@ -1,15 +1,12 @@
 import React from 'react';
 import Description from './Description';
 
+const Hilights = () => (
+  <div className="highlight_wrapper">
 
-const Hilights = () => {
-    return (
-        <div className="highlight_wrapper">
+    <Description />
 
-            <Description/>
-           
-        </div>
+  </div>
 
-    );
-};
-export default Hilights; 
+);
+export default Hilights;

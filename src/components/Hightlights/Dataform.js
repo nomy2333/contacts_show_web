@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -23,40 +22,43 @@ const useRowStyles = makeStyles({
   },
 });
 
-// function createData(cusId, name, username, email, phone, website,address,company) {
-//   return {
-//     cusId,
-//     name,
-//     username,
-//     email,
-//     phone,
-//     website,
-//     address:{
-//         street,
-//         suite,
-//         city,
-//         zipcode,
-//         geo: {
-//             lat,
-//             lng
-//       }
-//     },
-//     company:{
-//         coname,
-//         catchPhrase,
-//         bs
-//     }
-//   };
-// }
+function createData(rowlist) {
+  const addrlist = Object.values(rowlist[4]);
+  const conlist = Object.values(rowlist[7]);
+  return {
+    id: rowlist[0],
+    name: rowlist[1],
+    username: rowlist[2],
+    email: rowlist[3],
+    phone: rowlist[5],
+    website: rowlist[6],
+    address: {
+      street: addrlist[0],
+      suite: addrlist[1],
+      city: addrlist[2],
+      zipcode: addrlist[3],
+      geolat: Object.values(addrlist[4])[0],
+      geolng: Object.values(addrlist[4])[1],
+
+    },
+    company: {
+      name: conlist[0],
+      catchPhrase: conlist[1],
+      bs: conlist[2],
+    },
+  };
+}
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
+  const rowValue = Object.values(row);
 
-  console.log("22222222")
+  const eachContact = createData(rowValue);
+
   return (
-    <React.Fragment>
+    <>
       <TableRow className={classes.root}>
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -64,13 +66,13 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {eachContact.name}
         </TableCell>
-        <TableCell align="right">{row.id}</TableCell>
-        <TableCell align="right">{row.name}</TableCell>
-        <TableCell align="right">{row.username}</TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.phone}</TableCell>
+
+        <TableCell align="right">{eachContact.id}</TableCell>
+        <TableCell align="right">{eachContact.username}</TableCell>
+        <TableCell align="right">{eachContact.email}</TableCell>
+        <TableCell align="right">{eachContact.phone}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -84,22 +86,19 @@ function Row(props) {
                   <TableRow>
                     <TableCell>name</TableCell>
                     <TableCell>catchPhrase</TableCell>
-                    <TableCell align="right">bs</TableCell>
+                    <TableCell>bs</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.company.map((companyRow) => (
-                    <TableRow key={companyRow.name}>
-                      <TableCell component="th" scope="row">
-                        {companyRow.name}
-                      </TableCell>
-                      <TableCell>{companyRow.catchPhrase}</TableCell>
-                      <TableCell align="right">{companyRow.bs}</TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow align="right">
+                    <TableCell component="th" scope="row">{eachContact.company.name}</TableCell>
+                    <TableCell>{eachContact.company.catchPhrase}</TableCell>
+                    <TableCell>{eachContact.company.bs}</TableCell>
+                  </TableRow>
+
                 </TableBody>
               </Table>
-              
+
               <Typography variant="h6" gutterBottom component="div">
                 Address
               </Typography>
@@ -115,75 +114,49 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.address.map((addressRow) => (
-                    <TableRow key={addressRow.zipcode}>
-                      <TableCell component="th" scope="row">
-                        {addressRow.zipcode}
-                      </TableCell>
-                      <TableCell>{addressRow.street}</TableCell>
-                      <TableCell>{addressRow.suite}</TableCell>
-                      <TableCell>{addressRow.city}</TableCell>
-                      <TableCell align="right">{addressRow.geo.lat}</TableCell>
-                      <TableCell align="right">{addressRow.geo.lng}</TableCell>
-                    </TableRow>
-                  ))}
+
+                  <TableRow align="right">
+                    <TableCell component="th" scope="row">
+                      {eachContact.address.zipcode}
+                    </TableCell>
+                    <TableCell>{eachContact.address.street}</TableCell>
+                    <TableCell>{eachContact.address.suite}</TableCell>
+                    <TableCell>{eachContact.address.city}</TableCell>
+                    <TableCell align="right">{eachContact.address.geolat}</TableCell>
+                    <TableCell align="right">{eachContact.address.geolng}</TableCell>
+                  </TableRow>
+
                 </TableBody>
               </Table>
-              
+
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    cusId: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    company: PropTypes.arrayOf(
-      PropTypes.shape({
-        coname: PropTypes.string.isRequired,
-        catchPhrase: PropTypes.string.isRequired,
-        bs: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    address: PropTypes.arrayOf(
-        PropTypes.shape({
-          zipcode: PropTypes.string.isRequired,
-          street: PropTypes.string.isRequired,
-          suite: PropTypes.string.isRequired,
-          city: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-  }).isRequired,
-};
-
-
-
-export default function CollapsibleTable(props) {
+export default function CollapsibleTable({ Rows }) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>ID</TableCell>
-            <TableCell align="right">NAME</TableCell>
+            <TableCell>NAME</TableCell>
+            <TableCell align="right">ID</TableCell>
             <TableCell align="right">USERNAME</TableCell>
             <TableCell align="right">EMAIL</TableCell>
             <TableCell align="right">PHONE</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-            {/* {console.log("333333")} */}
-        {console.log("33333"+props)}
-          {/* {props.map((row) => (
+
+          {Rows.map((row) => (
             <Row key={row.name} row={row} />
-          ))} */}
-          
+          ))}
+
         </TableBody>
       </Table>
     </TableContainer>
