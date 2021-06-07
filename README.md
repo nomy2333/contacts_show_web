@@ -1,8 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
-In the project directory, you can run:
+## Technology related:
+Basic: HTML, CSS, Javascript, React, package-lock.<br />
+Testing tools: @testing-library/react.<br />
+Formatting: Eslint
+## In the project directory, you can run:
 
 ### `yarn start`
 
