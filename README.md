@@ -1,9 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Situation:
+Completing a web page to show the contacts from json.file. 
 ## Technology related:
 Basic: HTML, CSS, Javascript, React, package-lock.<br />
 Testing tools: @testing-library/react.<br />
-Formatting: Eslint
+Formatting: Eslint<br />
+
 ## In the project directory, you can run:
 
 ### `yarn start`
